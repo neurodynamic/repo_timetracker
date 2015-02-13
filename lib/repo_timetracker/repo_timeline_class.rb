@@ -15,7 +15,7 @@ class RepoTimeline
       if contains_repo? directory
         directory
       elsif directory.slice!(/\/\w+(\/?)$/)
-        get_closest_repository_root(directory)
+        find_in_or_above(directory)
       else
         nil
       end
