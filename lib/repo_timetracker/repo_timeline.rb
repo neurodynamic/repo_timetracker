@@ -11,7 +11,6 @@ class RepoTimeline
 
     @timeline_directory = initialize_timeline_directory_for(@repo_directory)
     @commit_records = load_commit_records
-    watch_for_file_change_events
   end
 
   def add_event(event_string)
@@ -37,6 +36,19 @@ class RepoTimeline
       total_time + cr.total_time
     }
   end
+
+  def watch_for_file_change_events
+    if defined? Process.daemon
+      kill_previous_commit_timeline_process
+      
+      Process.daemon
+      
+      FileWatcher.new([@repo_directory]).watch do |filename|
+        staging.generate_new_event("File changed: #{filename}")
+      end
+    end
+  end
+
 
 
   private
@@ -81,8 +93,9 @@ class RepoTimeline
   def initialize_timeline_directory_for(repo_directory)
     timeline_directory = "#{repo_directory}/.repo_timeline"
     gitignore_path = "#{repo_directory}.gitignore"
-
+    
     ensure_gitignored(timeline_directory)
+    FileUtils.mkdir_p(timeline_directory) unless File.directory?(timeline_directory)
 
     timeline_directory
   end
@@ -102,22 +115,9 @@ class RepoTimeline
     commit_filenames = dir_filenames.select { |f| f.include? '__commit__' }
     commit_filenames.map { |fn| "#{@timeline_directory}/#{fn}" }
   end
-
-
-  def watch_for_file_change_events
-    if defined? Process.daemon
-      kill_previous_commit_timeline_process
-
-      Process.daemon
-      
-      FileWatcher.new([@repo_directory]).watch do |filename|
-        staging.generate_new_event("File changed: #{filename}")
-      end
-    end
-  end
-
+  
   def kill_previous_commit_timeline_process
-    similar_processes = `ps -ax | grep repo_timetracker.rb`.split("\n")
+    similar_processes = `ps -ax | grep ruby.*repo_timetracker/bin/rpt`.split("\n")
 
     if previous_commit_timeline_process = similar_processes.find { |p| not p.include? 'grep' }
       previous_commit_timeline_pid = previous_commit_timeline_process.match(/\d+/)[0]

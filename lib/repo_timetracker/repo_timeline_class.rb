@@ -2,15 +2,14 @@ class RepoTimeline
   class << self
 
     def load_or_initialize_for(directory_called_from)
-      directory = find_in_or_above(directory)
-      timeline_directory = "#{directory}/.repo_timeline"
-
-      return 'No repo found.' if directory.nil?
+      directory = find_in_or_above(directory_called_from)
+      return nil if directory.nil?
 
       RepoTimeline.new(directory)
     end
 
     def find_in_or_above(directory)
+      return nil if directory.nil?
 
       if contains_repo? directory
         directory
