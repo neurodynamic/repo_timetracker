@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+case ARGV[0]
+
+when /^((rec)|(record))$/
+  RepoTimetracker.record((ARGV[1] or "event not specified"), Dir.pwd)
+
+when /^((ct)|(commit_time))$/
+  p RepoTimetracker.current_commit_time(Dir.pwd)
+  
+when /^((pt)|(project_time))$/
+  p RepoTimetracker.project_time(Dir.pwd)
+
+else
+  puts "Run 'rpt rec' to setup timetracking in a repo."
+  puts "Run 'rpt rec [event to record, e.g. '\"git commit\"]' to record an event."
+  puts "Run 'rpt ct' to see time spent on the current commit."
+  puts "Run 'rpt pt' to see total time spent on the current project."
+end
