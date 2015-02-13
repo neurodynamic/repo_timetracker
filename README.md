@@ -159,15 +159,6 @@ I also have a display of the time spent in the current commit show in my termina
 ```
 
 
-## Contributing
-
-1. Fork it ( https://github.com/[my-github-username]/repo_timetracker/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
-
 -----
 
 \* It automatically determines the relevant repo as either a repo in the directory it is called from, or the nearest repo that appears in a parent of that directory.
