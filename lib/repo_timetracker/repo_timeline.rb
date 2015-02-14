@@ -44,7 +44,7 @@ class RepoTimeline
       Process.daemon
       
       FileWatcher.new([@repo_directory]).watch do |filename|
-        staging.generate_new_event("File changed: #{filename}")
+        staging.generate_new_event("File changed: #{filename.slice(/[^\/]+$/)}")
       end
     end
   end
@@ -94,7 +94,7 @@ class RepoTimeline
     timeline_directory = "#{repo_directory}/.repo_timeline"
     gitignore_path = "#{repo_directory}/.gitignore"
     
-    ensure_gitignored(timeline_directory)
+    ensure_gitignored(gitignore_path)
     FileUtils.mkdir_p(timeline_directory) unless File.directory?(timeline_directory)
 
     timeline_directory
