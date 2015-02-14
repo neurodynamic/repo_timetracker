@@ -7,7 +7,7 @@ module RepoTimetracker
       repo_timeline = RepoTimeline.load_or_initialize_for(directory)
 
       if repo_timeline.nil?
-        'Error: no repo found.'
+        'no repo'
       else
         repo_timeline.add_event(event_string)
         repo_timeline.watch_for_file_change_events
@@ -18,7 +18,7 @@ module RepoTimetracker
       repo_timeline = RepoTimeline.load_or_initialize_for(directory)
       
       if repo_timeline.nil?
-        'Error: no repo found.'
+        'no repo'
       else
         time = repo_timeline.current_commit_time
         Time.at(time).utc.strftime("%H:%M:%S")
@@ -29,7 +29,7 @@ module RepoTimetracker
       repo_timeline = RepoTimeline.load_or_initialize_for(directory)
 
       if repo_timeline.nil?
-        'Error: no repo found.'
+        'no repo'
       else
         time = repo_timeline.project_time
         Time.at(time).utc.strftime("%H:%M:%S")
