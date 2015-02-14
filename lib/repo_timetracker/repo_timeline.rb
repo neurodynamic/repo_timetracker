@@ -92,7 +92,7 @@ class RepoTimeline
 
   def initialize_timeline_directory_for(repo_directory)
     timeline_directory = "#{repo_directory}/.repo_timeline"
-    gitignore_path = "#{repo_directory}.gitignore"
+    gitignore_path = "#{repo_directory}/.gitignore"
     
     ensure_gitignored(timeline_directory)
     FileUtils.mkdir_p(timeline_directory) unless File.directory?(timeline_directory)
@@ -100,13 +100,11 @@ class RepoTimeline
     timeline_directory
   end
 
-  def ensure_gitignored(timeline_directory)
-    gitignore_path = timeline_directory.sub('.repo_timeline', '.gitignore')
-    
+  def ensure_gitignored(gitignore_path)
     FileUtils.touch(gitignore_path)
 
-    unless File.readlines(gitignore_path).grep(/\.repo_timeline/)
-      open(gitignore_path, 'a') { |f| f.puts "\n.repo_timeline" }
+    unless File.readlines(gitignore_path).grep(/\.repo_timeline/).any?
+      `echo '\n.repo_timeline' >> #{gitignore_path}`
     end
   end
 
