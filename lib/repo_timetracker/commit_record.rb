@@ -1,4 +1,3 @@
-require 'yaml'
 require_relative "commit_record_class"
 
 class CommitRecord

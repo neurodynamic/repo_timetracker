@@ -1,17 +1,23 @@
 require_relative "repo_timetracker/version"
 require_relative "repo_timetracker/repo_timeline"
+require_relative "repo_timetracker/file_change_reporting"
 
 module RepoTimetracker
+  extend FileChangeReporting
+
   class << self
     def record(event_string, directory)
+      kill_reporter_daemons
+
       repo_timeline = RepoTimeline.load_or_initialize_for(directory)
 
       if repo_timeline.nil?
         'no repo'
       else
         repo_timeline.add_event(event_string)
-        repo_timeline.watch_for_file_change_events
       end
+
+      become_reporter_daemon(directory)
     end
 
     def current_commit_time(directory)

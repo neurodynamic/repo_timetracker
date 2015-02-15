@@ -1,3 +1,5 @@
+require 'yaml'
+
 class CommitRecord
   class << self
 
