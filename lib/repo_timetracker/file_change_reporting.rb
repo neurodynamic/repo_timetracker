@@ -5,7 +5,6 @@ module FileChangeReporting
   def kill_reporter_daemons
 
     timetracker_process_pids.each do |pid|
-      puts "Killing #{pid}"
       Process.kill("HUP", pid) if is_not_current_process(pid)
     end
   end
@@ -28,7 +27,7 @@ module FileChangeReporting
   end
 
   def timetracker_process_pids
-    processes = `ps -ax | grep ruby.*repo_timetracker/bin/rpt`.split("\n")
+    processes = `ps -ax | grep ruby.*repo_timetracker`.split("\n")
     processes_without_that_grep = processes.select { |p| not p.include? 'grep' }
 
     processes_without_that_grep.map { |p| pid_from_string(p) }
