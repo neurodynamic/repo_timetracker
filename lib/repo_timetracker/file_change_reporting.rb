@@ -26,7 +26,7 @@ module FileChangeReporting
   end
 
   def timetracker_process_pids
-    processes = `ps -ax | grep ruby.*rpt rec`.split("\n")
+    processes = `ps -ax | grep 'ruby.*rpt rec'`.split("\n")
     processes_without_that_grep = processes.select { |p| not p.include? 'grep' }
 
     processes_without_that_grep.map { |p| pid_from_string(p) }
